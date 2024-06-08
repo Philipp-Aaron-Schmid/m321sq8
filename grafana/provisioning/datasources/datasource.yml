@@ -1,0 +1,13 @@
+apiVersion: 1
+
+datasources:
+  - name: MQTT
+    type: grafana-mqtt-datasource
+    access: proxy
+    orgId: 1
+    url: mqtt://mqtt-broker:1883
+    jsonData:
+      username: ""
+      password: ""
+      clientId: grafana
+      topics: ["sensor/1/subscribe", "sensor/2/subscribe", "sensor/3/subscribe", "sensor/4/subscribe"]

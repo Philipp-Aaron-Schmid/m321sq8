@@ -1,0 +1,11 @@
+apiVersion: 1
+
+datasources:
+  - name: MQTT2
+    type: grafana-mqtt-datasource
+    access: proxy
+    url: mqtt://mqtt-broker:1883
+    basicAuth: false
+    jsonData:
+      authType: anonymous
+      clientId: grafana-mqtt-client

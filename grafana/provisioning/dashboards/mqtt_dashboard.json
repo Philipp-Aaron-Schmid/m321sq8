@@ -1,0 +1,111 @@
+{
+    "dashboard": {
+      "id": null,
+      "uid": "mqtt_dashboard",
+      "title": "MQTT Dashboard",
+      "timezone": "browser",
+      "panels": [
+        {
+          "title": "Sensor 1",
+          "type": "graph",
+          "datasource": "MQTT2",
+          "targets": [
+            {
+              "target": "sensor/1/subscribe",
+              "refId": "A"
+            }
+          ],
+          "yaxes": [
+            {
+              "format": "short"
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ],
+          "xaxis": {
+            "show": true
+          }
+        },
+        {
+          "title": "Sensor 2",
+          "type": "graph",
+          "datasource": "MQTT2",
+          "targets": [
+            {
+              "target": "sensor/2/subscribe",
+              "refId": "A"
+            }
+          ],
+          "yaxes": [
+            {
+              "format": "short"
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ],
+          "xaxis": {
+            "show": true
+          }
+        },
+        {
+          "title": "Sensor 3",
+          "type": "graph",
+          "datasource": "MQTT2",
+          "targets": [
+            {
+              "target": "sensor/3/subscribe",
+              "refId": "A"
+            }
+          ],
+          "yaxes": [
+            {
+              "format": "short"
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ],
+          "xaxis": {
+            "show": true
+          }
+        },
+        {
+          "title": "Sensor 4",
+          "type": "graph",
+          "datasource": "MQTT2",
+          "targets": [
+            {
+              "target": "sensor/4/subscribe",
+              "refId": "A"
+            }
+          ],
+          "yaxes": [
+            {
+              "format": "short"
+            },
+            {
+              "format": "short",
+              "logBase": 1
+            }
+          ],
+          "xaxis": {
+            "show": true
+          }
+        }
+
+      ],
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "refresh": "5s"
+    },
+    "folderId": 0,
+    "overwrite": false
+  }
+  

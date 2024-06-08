@@ -1,0 +1,16 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:465'
+  smtp_from: 'ph.a.schmid.test@gmail.com'
+  smtp_auth_username: 'ph.a.schmid.test@gmail.com'
+  smtp_auth_password: 'AllThingsStartSomewhere'
+
+route:
+  receiver: 'mail'
+  repeat_interval: 4h
+  group_by: ['alertname']
+
+receivers:
+  - name: 'mail'
+    email_configs:
+      - to: 'ph.a.schmid.test@gmail.com'
+        require_tls: false  # Add this line

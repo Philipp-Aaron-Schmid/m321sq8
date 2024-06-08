@@ -1,0 +1,22 @@
+groups:
+  - name: node_monitoring
+    rules:
+      - alert: NodeDown
+        expr: up{job="nodes"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Node down (instance {{ $labels.instance }})"
+          description: "{{ $labels.instance }} down for +1 minute."
+          
+  - name: java_monitoring
+    rules:
+      - alert: JavaAppDown
+        expr: up{job="java-app"} == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Java app down (instance {{ $labels.instance }})"
+          description: "{{ $labels.instance }} down for 10 seconds."

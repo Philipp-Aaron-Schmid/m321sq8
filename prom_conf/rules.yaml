@@ -1,0 +1,26 @@
+groups:
+  - name: example
+    rules:
+      # Recording rule example
+      - record: job:http_inprogress_requests:sum
+        expr: sum(http_inprogress_requests) by (job)
+        
+      # Alerting rule example
+      - alert: InstanceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes."
+          
+      # Another alerting rule
+      - alert: HighRequestLatency
+        expr: http_request_duration_seconds_sum / http_request_duration_seconds_count > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency"
+          description: "Request latency is above 1 second for more than 1 minute."

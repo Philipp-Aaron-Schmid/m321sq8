@@ -1,0 +1,70 @@
+apiVersion: 1
+
+# List of dashboards
+dashboards:
+  # Dashboard definition
+  - name: "MQTT Sensor Data"
+    # UID - Unique identifier for the dashboard
+    uid: mqtt-sensor-data-dashboard
+    # Dashboard version
+    version: 1
+    # Folder ID where the dashboard should be created
+    folderId: 0
+    # Dashboard JSON content
+    content:
+      # JSON representation of the dashboard
+      title: "MQTT Sensor Data"
+      # Time range for the entire dashboard
+      time:
+        from: "now-5m"
+        to: "now"
+      # Rows for each sensor
+      rows:
+        # First row - Sensor 1
+        - title: "Sensor 1"
+          panels:
+            - title: "Sensor 1 Data"
+              type: singlestat
+              targets:
+                - refId: A
+                  type: mqtt
+                  topic: "sensor/1/subscribe"
+                  jsonData:
+                    metric: "value"
+              datasource: MQTT
+        # Second row - Sensor 2
+        - title: "Sensor 2"
+          panels:
+            - title: "Sensor 2 Data"
+              type: singlestat
+              targets:
+                - refId: A
+                  type: mqtt
+                  topic: "sensor/2/subscribe"
+                  jsonData:
+                    metric: "value"
+              datasource: MQTT
+        # Third row - Sensor 3
+        - title: "Sensor 3"
+          panels:
+            - title: "Sensor 3 Data"
+              type: singlestat
+              targets:
+                - refId: A
+                  type: mqtt
+                  topic: "sensor/3/subscribe"
+                  jsonData:
+                    metric: "value"
+              datasource: MQTT
+        # Fourth row - Sensor 4
+        - title: "Sensor 4"
+          panels:
+            - title: "Sensor 4 Data"
+              type: singlestat
+              targets:
+                - refId: A
+                  type: mqtt
+                  topic: "sensor/4/subscribe"
+                  jsonData:
+                    metric: "value"
+              datasource: MQTT

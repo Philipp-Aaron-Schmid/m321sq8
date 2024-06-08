@@ -1,0 +1,38 @@
+scrape_configs:
+  - job_name: 'nodes'
+    scrape_interval: 10s
+    static_configs:
+      - targets: 
+          - demo1:9100
+          - demo2:9100
+
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+    - targets:
+      - cadvisor:8080
+
+  - job_name: 'java-app'
+    scrape_interval: 10s
+    static_configs:
+      - targets: 
+          - javasensor-1:8080
+          - javasensor-2:8080
+          - javasensor-3:8080
+          - javasensor-4:8080
+          
+  - job_name: 'alertmanager'
+    scrape_interval: 10s
+    static_configs:
+      - targets: 
+          - alertmanager:9093
+
+rule_files:
+  - "alert_rules.yaml"
+  - "rules.yaml"
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+      - targets: [ 'alertmanager:9093' ]
