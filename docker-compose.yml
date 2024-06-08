@@ -1,0 +1,118 @@
+version: '3.8'
+
+services:
+  demo1:
+    image: prom/node-exporter:v1.7.0
+    container_name: demo1
+    networks:
+      - mqtt_network
+
+  demo2:
+    image: prom/node-exporter:v1.7.0
+    container_name: demo2
+    networks:
+      - mqtt_network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+    volumes:
+      - ./prom_conf/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - ./prom_conf/alert_rules.yaml:/etc/prometheus/alert_rules.yaml:ro
+      - ./prom_conf/rules.yaml:/etc/prometheus/rules.yaml
+    depends_on:
+      - cadvisor
+    networks:
+      - mqtt_network
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/snap/docker/common/var-lib-docker:/var/lib/docker:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+    depends_on:
+    - redis
+    networks:
+      - mqtt_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+    - 6379:6379
+    networks:
+      - mqtt_network
+
+  alertmanager:
+    container_name: alertmanager
+    image: prom/alertmanager:v0.23.0
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - "./alertmanager:/config"
+      - alertmanager-data:/data
+    command: --config.file=/config/alertmanager.yaml --log.level=debug
+    networks:
+      - mqtt_network
+
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker
+    volumes:
+      - ./path/to/mosquitto/config:/mosquitto/config
+      - ./path/to/mosquitto/data:/mosquitto/data
+      - ./path/to/mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    networks:
+      - mqtt_network
+    command: mosquitto -c /mosquitto/config/mosquitto.conf
+
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    networks:
+      - mqtt_network
+    command: sh -c "grafana-cli plugins install grafana-mqtt-datasource && grafana-server"
+
+  my-app-1:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    container_name: javasensor-1
+    environment:
+      - PUBLISH_TOPIC=sensor/1/publish
+      - SUBSCRIBE_TOPIC=sensor/1/subscribe
+      - DELAY=1000
+      - MQTT_BROKER_HOST=mqtt-broker
+    networks:
+      - mqtt_network
+    command: ["sensor/1/publish", "sensor/1/subscribe", "1000", "mqtt-broker"]
+
+networks:
+  mqtt_network:
+    driver: bridge
+
+volumes:
+  grafana-storage:
+  alertmanager-data:
